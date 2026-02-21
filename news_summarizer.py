@@ -7,7 +7,6 @@ from newspaper import Article
 from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate
 
-# 🔐 Groq API Key
 os.environ["GROQ_API_KEY"] = ""
 
 llm = ChatGroq(
@@ -20,7 +19,6 @@ st.set_page_config(page_title="AI News Summarizer", page_icon="📰", layout="wi
 st.title("📰 AI News Article Summarizer")
 st.caption("Smart AI-powered summarization with customizable output.")
 
-# ---------------- SIDEBAR SETTINGS ---------------- #
 
 st.sidebar.header("⚙️ Summary Settings")
 
@@ -48,14 +46,13 @@ temperature = st.sidebar.slider(
     value=0.0
 )
 
-# Update model temperature dynamically
+
 llm.temperature = temperature
 
-# ---------------- URL INPUT ---------------- #
 
 url = st.text_input("🔗 Enter News Article URL")
 
-# ---------------- ARTICLE EXTRACTION ---------------- #
+
 
 def extract_article(url):
     try:
@@ -68,7 +65,7 @@ def extract_article(url):
     except:
         pass
 
-    # Fallback method
+ 
     headers = {"User-Agent": "Mozilla/5.0"}
     response = requests.get(url, headers=headers, timeout=10)
     soup = BeautifulSoup(response.text, "html.parser")
@@ -88,7 +85,7 @@ def extract_article(url):
 
     return title, text
 
-# ---------------- GENERATE BUTTON ---------------- #
+
 
 if st.button("🚀 Generate Summary"):
 
@@ -108,7 +105,7 @@ if st.button("🚀 Generate Summary"):
                 with st.expander("📖 Preview Extracted Content"):
                     st.write(text[:2000])
 
-                # Create dynamic instruction
+               
                 if summary_style == "Bullet Points":
                     instruction = f"Summarize in exactly {bullet_count} bullet points."
                 elif summary_style == "Paragraph":
@@ -131,4 +128,5 @@ if st.button("🚀 Generate Summary"):
 
         except Exception as e:
             st.error("Failed to process article.")
+
             st.write(str(e))
